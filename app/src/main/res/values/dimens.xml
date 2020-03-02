@@ -2,4 +2,5 @@
     <dimen name="textname">30sp</dimen>
     <dimen name="textlist">20sp</dimen>
     <dimen name="textfirts">23sp</dimen>
+    <dimen name="text">12sp</dimen>
 </resources>

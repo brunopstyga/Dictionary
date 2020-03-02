@@ -47,7 +47,7 @@ class FragmentEdit : Fragment(){
             }
         }
         view.addData.setOnClickListener {
-            if(editTextEnglish.text.trim().length > 0 ) {
+            if(editTextEnglish.text.trim().length > 0 && editTextEsp.text.trim().length > 0) {
                 model.existsWord(editTextEnglish.text.toString()).observe(this, Observer {
                     if (!it) {
                         model.inserData(
@@ -65,7 +65,7 @@ class FragmentEdit : Fragment(){
                 })
             }
             else
-                Toast.makeText(context, "Enter the Word", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Complete all fields", Toast.LENGTH_LONG).show()
         }
         return view
     }

@@ -7,4 +7,5 @@
     <color name="background_list">#CEE7F3</color>
     <color name="background">#636AEE</color>
     <color name="background_edit">#DEDEE4</color>
+    <color name="bordercolor">#02024D</color>
 </resources>

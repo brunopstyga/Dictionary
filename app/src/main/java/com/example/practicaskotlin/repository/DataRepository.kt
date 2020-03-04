@@ -4,8 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.practicaskotlin.data.model.room.Data
 import com.example.practicaskotlin.data.model.room.DataDao
+import javax.inject.Inject
 
-class DataRepository(private val dataDao: DataDao?){
+class DataRepository @Inject constructor (private val dataDao: DataDao?){
 
     val allData: LiveData<List<Data>> = dataDao!!.getAllUsers()
 

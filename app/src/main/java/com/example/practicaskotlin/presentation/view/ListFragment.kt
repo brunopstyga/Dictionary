@@ -11,17 +11,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.practicaskotlin.R
 import com.example.practicaskotlin.business.viewmodel.DataViewModel
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_list.*
 import java.lang.Exception
+import javax.inject.Inject
 import kotlin.math.log
 
-class ListFragment : Fragment() {
+class ListFragment : DaggerFragment() {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var dataViewModel: DataViewModel
     private var recyclerView: RecyclerView? = null
     private lateinit var adapter: DatadListAdapter
@@ -30,8 +35,12 @@ class ListFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dataViewModel = activity?.let {
-            ViewModelProvider(it).get(DataViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory)[DataViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
+        dataViewModel.dataGet().observe(this, Observer {
+            adapter.setData(it)
+        })
+        enableSwipe()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,18 +62,13 @@ class ListFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_list, container, false)
         val activity = activity as Context
 
-        val model : DataViewModel by activityViewModels<DataViewModel>()
+//        val model : DataViewModel by activityViewModels<DataViewModel>()
         recyclerView = view.findViewById<RecyclerView>(R.id.customRecyclerView)
         adapter = DatadListAdapter(activity) { id, newWord ->
-            model.editWords(id, newWord)
+            dataViewModel.editWords(id, newWord)
         }
         recyclerView?.adapter = adapter
         recyclerView?.layoutManager = LinearLayoutManager(activity)
-//        adapter.setData(listOf(Data("1","hello","hola")))
-        model.dataGet().observe(this, Observer {
-
-            adapter.setData(it)
-        })
         enableSwipe()
         return view
     }

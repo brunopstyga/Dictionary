@@ -1,26 +1,15 @@
 package com.example.practicaskotlin.business.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.practicaskotlin.data.model.room.Data
 import com.example.practicaskotlin.data.model.room.DataRoomDatabase
 import com.example.practicaskotlin.repository.DataRepository
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DataViewModel(
-    application: Application
-) : AndroidViewModel(application) {
+class DataViewModel @Inject constructor( val dataRepository : DataRepository) : ViewModel() {
 
-    private val dataRepository: DataRepository
-
-    init {
-        val dataDao = DataRoomDatabase.getDatabase(application)?.dataDao()
-       dataRepository = DataRepository(dataDao)
-
-    }
 
     fun inserData(data: Data){
     viewModelScope.launch {

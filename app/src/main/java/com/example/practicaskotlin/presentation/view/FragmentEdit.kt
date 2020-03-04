@@ -11,24 +11,28 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.example.practicaskotlin.R
 import com.example.practicaskotlin.business.viewmodel.DataViewModel
 import com.example.practicaskotlin.data.model.room.Data
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit.*
 import kotlinx.android.synthetic.main.fragment_edit.view.*
 import java.lang.Exception
+import javax.inject.Inject
 
 /**
  * A simple [Fragment] subclass.
  */
-class FragmentEdit : Fragment(){
+class FragmentEdit : DaggerFragment(){
 
+    @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var dataViewModel: DataViewModel
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dataViewModel = activity?.let {
-            ViewModelProvider(it).get(DataViewModel::class.java)
+            ViewModelProviders.of(this, viewModelFactory)[DataViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
     }
 
@@ -36,7 +40,7 @@ class FragmentEdit : Fragment(){
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val model : DataViewModel by activityViewModels<DataViewModel>()
+//        val model : DataViewModel by activityViewModels<DataViewModel>()
         // Inflate the layout for this fragment
         var view = inflater.inflate(R.layout.fragment_edit, container, false)
         view.Buttonlistdata.setOnClickListener {
@@ -48,9 +52,9 @@ class FragmentEdit : Fragment(){
         }
         view.addData.setOnClickListener {
             if(editTextEnglish.text.trim().length > 0 && editTextEsp.text.trim().length > 0) {
-                model.existsWord(editTextEnglish.text.toString()).observe(this, Observer {
+                dataViewModel.existsWord(editTextEnglish.text.toString()).observe(this, Observer {
                     if (!it) {
-                        model.inserData(
+                        dataViewModel.inserData(
                             Data(
                                 editTextEnglish.text.toString(),
                                 editTextEsp.text.toString()

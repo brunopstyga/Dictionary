@@ -6,5 +6,8 @@
     <string name="title_login">Hello blank fragment</string>
     <string name="sas">Hello blank fragment</string>
     <string name="hello_blank_fra">Hello blank fragment</string>
+    <string name="file">Convert and send to the list</string>
+    <string name="file_provider_name">.fileProvider</string>
+
 
 </resources>

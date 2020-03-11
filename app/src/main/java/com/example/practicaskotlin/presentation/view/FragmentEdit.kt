@@ -52,7 +52,7 @@ class FragmentEdit : DaggerFragment(){
         }
         view.addData.setOnClickListener {
             if(editTextEnglish.text.trim().length > 0 && editTextEsp.text.trim().length > 0) {
-                dataViewModel.existsWord(editTextEnglish.text.toString()).observe(this, Observer {
+                dataViewModel.existsWord(editTextEnglish.text.toString()).observe(viewLifecycleOwner, Observer {
                     if (!it) {
                         dataViewModel.inserData(
                             Data(

@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../Dictionary-PracticasKotlin.iml" filepath="$PROJECT_DIR$/../Dictionary-PracticasKotlin.iml" group="PracticasKotlin" />
+      <module fileurl="file://$PROJECT_DIR$/Dictionary-app.iml" filepath="$PROJECT_DIR$/Dictionary-app.iml" group="PracticasKotlin/app" />
       <module fileurl="file://$PROJECT_DIR$/../PracticasKotlin.iml" filepath="$PROJECT_DIR$/../PracticasKotlin.iml" group="PracticasKotlin" />
       <module fileurl="file://$PROJECT_DIR$/app.iml" filepath="$PROJECT_DIR$/app.iml" group="PracticasKotlin/app" />
     </modules>

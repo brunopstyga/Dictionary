@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.practicaskotlin.R
 import com.example.practicaskotlin.business.viewmodel.DataViewModel
 import com.example.practicaskotlin.data.model.room.Data
+import com.example.practicaskotlin.databinding.FragmentEditBinding
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_edit.*
 import kotlinx.android.synthetic.main.fragment_edit.view.*
@@ -26,31 +28,38 @@ import javax.inject.Inject
  */
 class FragmentEdit : DaggerFragment(){
 
+
+
     @Inject lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var dataViewModel: DataViewModel
 
+
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        dataViewModel = activity?.let {
-            ViewModelProviders.of(this, viewModelFactory)[DataViewModel::class.java]
-        } ?: throw Exception("Invalid Activity")
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        val model : DataViewModel by activityViewModels<DataViewModel>()
-        // Inflate the layout for this fragment
-        var view = inflater.inflate(R.layout.fragment_edit, container, false)
-        view.Buttonlistdata.setOnClickListener {
 
+        dataViewModel = activity?.let {
+            ViewModelProviders.of(this, viewModelFactory)[DataViewModel::class.java]
+        } ?: throw Exception("Invalid Activity")
+
+        val binding =  DataBindingUtil.inflate<FragmentEditBinding>(inflater,R.layout.fragment_edit, container, false)
+        binding.viewmodel = dataViewModel
+        binding.lifecycleOwner = this
+        binding.Buttonlistdata.setOnClickListener(View.OnClickListener {
             activity?.let{
                 val fragmentBlank = ListFragment.newInstance()
-                createFragment(fragmentBlank);
+                createFragment(fragmentBlank)
             }
-        }
-        view.addData.setOnClickListener {
+        })
+
+        binding.addData.setOnClickListener {
             if(editTextEnglish.text.trim().length > 0 && editTextEsp.text.trim().length > 0) {
                 dataViewModel.existsWord(editTextEnglish.text.toString()).observe(viewLifecycleOwner, Observer {
                     if (!it) {
@@ -71,7 +80,7 @@ class FragmentEdit : DaggerFragment(){
             else
                 Toast.makeText(context, "Complete all fields", Toast.LENGTH_LONG).show()
         }
-        return view
+        return binding.root
     }
 
     companion object {

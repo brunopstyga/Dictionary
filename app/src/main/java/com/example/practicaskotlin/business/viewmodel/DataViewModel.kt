@@ -1,15 +1,21 @@
 package com.example.practicaskotlin.business.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.practicaskotlin.data.model.room.Data
-import com.example.practicaskotlin.data.model.room.DataRoomDatabase
 import com.example.practicaskotlin.repository.DataRepository
+import kotlinx.android.synthetic.main.fragment_edit.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DataViewModel @Inject constructor( val dataRepository : DataRepository) : ViewModel() {
+class DataViewModel @Inject constructor( application: Application, val dataRepository : DataRepository) : AndroidViewModel(application)  {
 
+    private val context = getApplication<Application>().applicationContext
+
+
+    val editTextEnglish = MutableLiveData<String>()
+    val editTextSpanish = MutableLiveData<String>()
 
     fun inserData(data: Data){
     viewModelScope.launch {
@@ -37,5 +43,6 @@ class DataViewModel @Inject constructor( val dataRepository : DataRepository) : 
             dataRepository.editWords(id, dataEnglish)
         }
     }
+
 
 }

@@ -44,5 +44,4 @@ class DataViewModel @Inject constructor( application: Application, val dataRepos
         }
     }
 
-
 }

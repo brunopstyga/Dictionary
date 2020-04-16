@@ -94,7 +94,4 @@ class FragmentEdit : DaggerFragment(){
         listfragment?.addToBackStack(null)
         listfragment?.commit()
     }
-
-
-
 }

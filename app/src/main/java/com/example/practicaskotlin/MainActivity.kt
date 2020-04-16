@@ -11,7 +11,6 @@ import kotlin.math.log
 class MainActivity : AppCompatActivity() {
 
     var fragmentmanager : FragmentManager? = null
-// https://developer.android.com/jetpack/androidx/releases/lifecycle version
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

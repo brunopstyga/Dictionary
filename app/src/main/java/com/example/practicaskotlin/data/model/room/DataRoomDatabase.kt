@@ -10,25 +10,25 @@ abstract  class DataRoomDatabase : RoomDatabase() {
 
     abstract fun dataDao(): DataDao
 
-//    companion object {
-//        @Volatile
-//        private var dataRoomIntance : DataRoomDatabase? = null;
-//    fun getDatabase(context: Context):DataRoomDatabase? {
-//     if (dataRoomIntance == null){
-//         synchronized(DataRoomDatabase::class.java){
-//             if(dataRoomIntance == null){
-//                 dataRoomIntance = Room.databaseBuilder<DataRoomDatabase>(
-//                     context.applicationContext,
-//                     DataRoomDatabase::class.java,
-//                     "dictionary")
-//                     .build()
-//             }
-//         }
-//     }
-//        return dataRoomIntance
-//    }
+    companion object {
+        @Volatile
+        private var dataRoomIntance : DataRoomDatabase? = null;
+    fun getDatabase(context: Context):DataRoomDatabase? {
+     if (dataRoomIntance == null){
+         synchronized(DataRoomDatabase::class.java){
+             if(dataRoomIntance == null){
+                 dataRoomIntance = Room.databaseBuilder<DataRoomDatabase>(
+                     context.applicationContext,
+                     DataRoomDatabase::class.java,
+                     "dictionary")
+                     .build()
+             }
+         }
+     }
+        return dataRoomIntance
+    }
 
-//    }
+    }
 
 
 

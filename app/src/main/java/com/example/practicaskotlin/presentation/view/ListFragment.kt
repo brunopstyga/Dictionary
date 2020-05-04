@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Environment
 import android.view.*
 import androidx.core.content.FileProvider
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -18,6 +19,7 @@ import com.example.practicaskotlin.BuildConfig
 import com.example.practicaskotlin.R
 import com.example.practicaskotlin.business.viewmodel.DataViewModel
 import com.example.practicaskotlin.data.model.room.Data
+import com.example.practicaskotlin.databinding.FragmentListBinding
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_list.view.*
 import java.io.File
@@ -31,20 +33,20 @@ class ListFragment : DaggerFragment() {
     private lateinit var dataViewModel: DataViewModel
     private var recyclerView: RecyclerView? = null
     private lateinit var adapter: DatadListAdapter
-    private var listData = listOf<Data>()
     private lateinit var imageUri : Uri
     private lateinit var imgPath : String
 
 
-
-
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         dataViewModel = activity?.let {
             ViewModelProviders.of(this, viewModelFactory)[DataViewModel::class.java]
         } ?: throw Exception("Invalid Activity")
-        dataViewModel.dataGet().observe(this, Observer {
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dataViewModel.dataGet().observe(viewLifecycleOwner, Observer {
             adapter.setData(it)
             writeDataUri(it)
 
@@ -68,17 +70,17 @@ class ListFragment : DaggerFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+     val binding = DataBindingUtil.inflate<FragmentListBinding>(inflater,
+         R.layout.fragment_list, container, false )
 
-        var view = inflater.inflate(R.layout.fragment_list, container, false)
         val activity = activity as Context
-        recyclerView = view.findViewById<RecyclerView>(R.id.customRecyclerView)
-        adapter = DatadListAdapter(activity) { id, newWord ->
-            dataViewModel.editWords(id, newWord)
-        }
-        recyclerView?.adapter = adapter
-        recyclerView?.layoutManager = LinearLayoutManager(activity)
-        enableSwipe()
-        return view
+        binding.list = dataViewModel
+        adapter = DatadListAdapter(activity)
+        recyclerView = binding.customRecyclerView
+        binding.customRecyclerView.adapter = adapter
+        binding.customRecyclerView.layoutManager = LinearLayoutManager(activity)
+        binding.setLifecycleOwner(this)
+        return binding.root
     }
 
     companion object {
@@ -115,7 +117,7 @@ class ListFragment : DaggerFragment() {
     }
 
     private fun writeDataUri(data: List<Data>): Uri {
-        val folder = File("${context!!.getExternalFilesDir(Environment.DIRECTORY_DCIM)}")
+        val folder = File("${requireContext().getExternalFilesDir(Environment.DIRECTORY_DCIM)}")
         folder.mkdirs()
 
         val file = File(folder, "DataList.txt")
@@ -123,7 +125,7 @@ class ListFragment : DaggerFragment() {
             file.delete()
         file.createNewFile()
             imageUri = FileProvider.getUriForFile(
-                activity!!,
+                requireActivity(),
                 BuildConfig.APPLICATION_ID + getString(R.string.file_provider_name),
                 file
             )
